@@ -1,0 +1,41 @@
+.godglow {
+  -webkit-animation: glow 6s ease-in-out infinite alternate;
+  -moz-animation: glow 6s ease-in-out infinite alternate;
+  animation: glow 6s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes glow {
+  from {
+    text-shadow: 0 0 1px rgba(160, 102, 1,.75);
+  }
+  to {
+    text-shadow: 0 0 1px rgba(153, 99, 6,.75), 0 0 1.1px rgba(153, 99, 6,.75), 0 0 1.2px rgba(153, 99, 6,.75), 0 0 1.3px rgba(153, 99, 6,.75), 0 0 1.3px rgba(153, 99, 6,.75), 0 0 1.3px rgba(153, 99, 6,.75);
+  }
+}
+.tw-core-button--primary {
+	background: #8f40ef !important;
+}
+
+.shirt-box {
+  z-index: 100000;
+  top: 10vh;
+  left: 10vh;
+  position: fixed;
+  display: flex;
+  min-width: 15vw;
+  max-width: 1000px;
+  overflow-x: scroll;
+  background: rgba(0,0,0,.5)
+}
+.shirt-img {
+  max-width: 150px;
+  padding: 10px;
+}
+.shirt-text {
+  padding: 8px;
+}
+.shirt {
+  display: inline-block;
+  flex: 1;
+  padding: 8px;
+}

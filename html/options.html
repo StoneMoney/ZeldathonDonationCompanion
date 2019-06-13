@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="../css/global.css"></link>
+        <link rel="stylesheet" type="text/css" href="../css/options.css"></link>
+    </head>
+    <body>
+        <div id="options-outer">
+            <div id="options-inner">
+                <div id="options-page-title" class="page-title">Zeldathon Donation Companion</div>
+                <div id="options-page-subtitle" class="page-subtitle">Configuration and Settings</div>
+                <div id="options-area">
+                    <div class="control-group">
+                        <label class="control-label">Budget</label>
+                        <input type = "number" id = "budget" step = ".01" min = "1.00" />
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Set Donation Total</label>
+                        <input type = "number" id = "total" step = ".01" min = "1.00" />
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Remove chat messages with only the word/emote "BLESS" </label>
+                        <input type = "checkbox" id = "blessfilter"  />
+                    </div>
+                    <!--<div class="control-group">
+                        <label class="control-label">Set Prefill Amount</label>
+                        <input type = "number" id = "defaultamount" step = ".01" min = "1.00" />
+                    </div> -->
+                </div>
+                <button id="btn">Save Options</button>
+                <br>
+                <a href="https://stonemoney.github.io/">Created by stonemoney533</a>
+                <br>
+                <br>
+                <br>
+                <button id="destroyIt">RESET EVERYTHING</button>
+            </div>
+        </div>
+
+        <!-- load javascript: unique html page javascript file -->
+        <script type="text/javascript" src="../js/options.js"></script>
+    </body>
+</html>

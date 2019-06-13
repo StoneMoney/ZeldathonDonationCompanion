@@ -1,0 +1,37 @@
+{
+    "name": "Unofficial Zeldathon Donation Companion",
+    "version": "3.0",
+    "manifest_version": 2,
+    "description": "Unofficial donation companion for Zeldathon. Track donations, view tiers, set budgets",
+    "icons": {
+		"16": "images/icon_16.png",
+        "19": "images/icon_19.png",
+        "38": "images/icon_38.png",
+        "128": "images/icon_128.png"
+    },
+    "permissions": ["storage"],
+    "browser_action": {
+        "default_title": "ZDC",
+        "default_icon": {
+            "19": "images/icon_19.png",
+            "38": "images/icon_38.png"
+        },
+        "default_popup": "html/main.html"
+    },
+    "options_page": "html/options.html",
+    "homepage_url": "http://zeldathon.net/",
+	"background": {
+		"scripts": ["js/background.js"],
+		"persistent": false
+	},
+    "content_scripts": [{
+      "css": ["css/alert.css"],
+      "js": ["js/donatepage.js"],
+      "matches": ["https://donate.zeldathon.net/*"]
+    },
+	{
+      "css": ["css/twitch.css"],
+      "js": ["js/live.js"],
+      "matches": ["https://www.twitch.tv/supermcgamer/*","https://www.twitch.tv/SuperMCgamer/*","https://www.twitch.tv/SuperMCGamer","https://www.twitch.tv/SuperMCGamer"]
+    }]
+}

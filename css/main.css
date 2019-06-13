@@ -1,0 +1,27 @@
+/*
+** file: css/main.css
+** description: custom styling for "html/main.html" file
+*/
+body {
+  font-family:"Trebuchet MS",sans-serif;
+  width:400px;
+}
+.version {
+  display: inline-block;
+}
+.head {
+  display: inline-block;
+  font-size: 22px;
+}
+.donationtotal {
+  font-size: 16px;
+}
+#courage {
+  color: #50a045;
+}
+#wisdom {
+  color: #4451dd;
+}
+#power {
+  color: #db4a2e;
+}
