@@ -2,7 +2,7 @@
 ** file: js/main.js
 ** description: javascript code for "html/main.html" page
 */
-
+var nf = new Intl.NumberFormat();
 var currentDonationTotal = 0;
 window.onload = function(){
   httpGet("https://zeldathon.net/api/Kinstone/total",setTotal);
@@ -23,7 +23,7 @@ window.onload = function(){
     if(isNaN(result.total) || result.total == null) {
       chrome.storage.sync.set({total: 0}, function(){});
     }
-    document.getElementById('totaldonated').innerHTML = "$"+result.total;
+    document.getElementById('totaldonated').innerHTML = "$"+nf.format(result.total);
   });
   chrome.storage.sync.get(['budget'], function(result) {
       if(isNaN(result.budget) || result.budget == null) {
@@ -32,7 +32,7 @@ window.onload = function(){
       if(result.budget == -1) {
         document.getElementById('budget').innerHTML = "none";
       } else {
-        document.getElementById('budget').innerHTML = "$"+result.budget;
+        document.getElementById('budget').innerHTML = "$"+nf.format(result.budget);
       }
   });
 

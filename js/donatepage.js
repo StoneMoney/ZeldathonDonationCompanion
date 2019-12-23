@@ -1,23 +1,22 @@
-
-//<script src="https://cdn.blockspring.com/blockspring.js"></script>
-//  blockspring.runParsed("read-worksheet-google-sheets", { "file_id": 1AQlGPgpH3CuxnM5JhClFTY9l6MzFqGyPXpWqYCzmzUQ, "worksheet_id": , "has_header": false}, { "api_key": "br_101994_945f0fe8a26ced0ae89c17b579a2ace81171d024" }, function(res){
-//    console.log(res.params);
-//  })
+var testMode = false;
 
 var currentDonationTotal;
 var pending;
+var pastDonations;
 var budget;
+var tierStrings = ['Gerudo','Kokiri','Goron','Zora','Oracle','Sage','Hero','Hylia','Triforce']
+var tierRequirements = [1,5,10,25,50,100,250,500,1000]
+var lockAmnt = -1;
 //finding vars
 var paypalFeeAlert = document.createElement("div")
 paypalFeeAlert.setAttribute("id", "paypalFeeAlert")
 var donationAmtContainer = document.querySelector("div.labeled");
 var donationName = document.querySelector("input[name='name']");
 var donationAmt = document.querySelector("input[name='amount']");
-var butt = document.querySelector("button.primary");
+var donationComment = document.querySelector("textarea[name='comments']");
+// var butt = document.querySelector("button.primary");
 var donFormBody = document.querySelector("form.donation");
 // var checker = document.querySelector("div.payment-modal");
-
-//httpGet("https://1ivxvsb9g2.execute-api.us-east-2.amazonaws.com/test/pets/",logger)
 
 var body = document.querySelector("div.body");
 var container = document.createElement('p');
@@ -33,16 +32,6 @@ chrome.runtime.onMessage.addListener(function(inMessage, callback) {
   loadSounds(inMessage.sounds)
 });
 window.onload = function(){
-  chrome.storage.sync.get(['defaultname'], function(result) {
-    if(result.defaultname != null) {
-      // donationName.value = result.defaultname
-    }
-  });
-  chrome.storage.sync.get(['defaultamount'], function(result) {
-    if(result.defaultamount != null) {
-      // donationAmt.value = result.defaultamount
-    }
-  });
   chrome.storage.sync.get(['total'], function(result) {
     if(isNaN(result.total) || result.total == null) {
       chrome.storage.sync.set({total: 0}, function(){});
@@ -50,7 +39,7 @@ window.onload = function(){
     } else {
       currentDonationTotal = result.total;
     }
-    item.innerHTML = "You have donated $"+result.total;
+    item.insertAdjacentText('afterbegin',"You have donated $"+result.total);
   });
   chrome.storage.sync.get(['budget'], function(result) {
     if(isNaN(result.budget) || result.budget == null) {
@@ -61,49 +50,78 @@ window.onload = function(){
     }
     if(budget == -1 || budget == undefined || budget == null){
       container.classList.add('ok');
-      itemB.innerHTML = "No set budget";
+      itemB.insertAdjacentText('afterbegin',"No set budget");
     } else if(parseFloat(currentDonationTotal) < parseFloat(result.budget)) {
       container.classList.add('good');
-      itemB.innerHTML = "You are within budget ($"+result.budget+")";
+      itemB.insertAdjacentText('afterbegin',"You are within budget ($"+result.budget+")")
     } else if (parseFloat(currentDonationTotal) == parseFloat(result.budget)) {
       container.classList.add('ok');
-      itemB.innerHTML = "You are at budget! ($"+result.budget+")";
+      itemB.insertAdjacentText('afterbegin',"You are at budget! ($"+result.budget+")")
     } else if(parseFloat(currentDonationTotal) > parseFloat(result.budget)) {
       container.classList.add('bad');
-      itemB.innerHTML = "You are over budget! ($"+result.budget+")";
+      itemB.insertAdjacentText('afterbegin',"You are over budget! ($"+result.budget+")")
     }
   });
   chrome.storage.sync.get(['pendingaddition'], function(result) {
-    if(isNaN(result.pendingaddition) || result.pendingaddition == null) {
-      chrome.storage.sync.set({pendingaddition: -1}, function(){});
-      pending = 0;
+    if(result.pendingaddition == null) {
+      pending = {value:0,name:''}
+      chrome.storage.sync.set({pendingaddition: JSON.stringify(pending)}, function(){});
     } else {
-      pending = result.pendingaddition;
+      pending = JSON.parse(result.pendingaddition);
+      console.log(pending)
     }
-    check()
+    chrome.storage.sync.get(['pastdonations'], function(result) {
+      if(result.pastdonations == null) {
+        pastDonations = new Map()
+        chrome.storage.sync.set({pastdonations: JSON.stringify(Array.from(pastDonations.entries()))}, function(){});
+      } else {
+        try {
+          pastDonations = new Map(JSON.parse(result.pastdonations));
+        } catch (e) {
+          console.log(e)
+          pastDonations = new Map();
+        }
+      }
+      check()
+    });
   });
   function check() {
     var checker = document.querySelector("div.payment-modal"); //payment-modal
-    if(checker != null) {
-      console.log("valid")
-      chrome.storage.sync.set({pendingaddition: 0}, function() {
+    //EXECUTES ON THE DONATION RESULT PAGE
+    if(checker != null || testMode) {
+      console.log("Valid donation result page")
+      var pClearValue = {value:0,name:''}
+      chrome.storage.sync.set({pendingaddition: JSON.stringify(pClearValue)}, function() {
       });
-      chrome.storage.sync.set({total: (parseFloat(currentDonationTotal) + parseFloat(pending)).toFixed(2)}, function() {
-           item.innerHTML = "You have donated $"+((parseFloat(currentDonationTotal)+parseFloat(pending))).toFixed(2);
+      //add the donation value to your total donation amount
+      //TODO: Show tier progress
+      chrome.storage.sync.set({total: (parseFloat(currentDonationTotal) + parseFloat(pending.value)).toFixed(2)}, function() {
+        item.innerHTML = '';
+        item.insertAdjacentText('afterbegin',"You have donated $"+((parseFloat(currentDonationTotal)+parseFloat(pending.value))).toFixed(2))
       });
+      var processedDonationMap = pastDonations;
+      //check if there was already a value for this donation name, if so make it additive
+      var initialValue = (pastDonations.has(pending.name.toLowerCase()) ? pastDonations.get(pending.name) : 0)
+      processedDonationMap.set(pending.name.toLowerCase(),parseFloat(parseFloat(initialValue)+parseFloat(pending.value)).toFixed(2))
+      chrome.storage.sync.set({pastdonations: JSON.stringify(Array.from(processedDonationMap.entries()))})
+    //EXECUTES ON THE "MAKE A DONATION" PAGE
     } else {
       httpGet("https://donate.zeldathon.net/total?unformatted=true",doTheThing)
-	  donationAmt.addEventListener('focusout',paypalFeeCheck);
-    donationAmtContainer.insertAdjacentHTML("afterend",paypalFeeAlert.outerHTML)
+      donationAmt.addEventListener('focusout',paypalFeeCheck);
+      donationAmt.addEventListener('input',resetLockAmount);
+      donationName.addEventListener('input',keepAmntLocked);
+      donationComment.addEventListener('input',keepAmntLocked);
+      donationName.addEventListener('focusout',donationTierCheck);
+      donationAmtContainer.insertAdjacentElement("afterend",paypalFeeAlert)
     }
   }
 }
 window.onbeforeunload = function() {
-// butt.onclick = function(){
   if(donationAmt.value != "") {
     var amt = parseFloat(donationAmt.value);
-    chrome.storage.sync.set({pendingaddition: amt}, function() {
-         console.log('Pending Value is set to ' + amt);
+    var data = {name: donationName.value, value: amt}
+    chrome.storage.sync.set({pendingaddition: JSON.stringify(data)}, function() {
+         console.log('Pending Value is set to ' + JSON.stringify(data));
     });
   }
 }
@@ -125,6 +143,80 @@ function paypalFeeCheck() {
 		document.getElementById("paypalFeeAlert").innerHTML = ""
 	}
 }
+//Because something on kinstone's end resets the amount box if programattically adjusted,
+//this is the workaround
+function keepAmntLocked() {
+  console.log('g '+lockAmnt)
+  if(lockAmnt > -1) {
+    donationAmt.value = lockAmnt;
+  }
+}
+function resetLockAmount() {
+  lockAmnt = donationAmt.value;
+  console.log("reset "+lockAmnt)
+}
+function donationTierCheck() {
+  var name = donationName.value.toLowerCase();
+  if(document.querySelector('div.z-tier-box')){
+    document.querySelector('div.z-tier-box').remove()
+  }
+  if(pastDonations.has(name)) {
+    var amnt = pastDonations.get(name)
+    var tier = getTierID(amnt)
+    var tierBox = document.createElement('div')
+    tierBox.classList.add('z-tier-box')
+    tierBox.insertAdjacentText('afterbegin','**Personal donations to this name**')
+    //PROGRESS BAR
+    if(tier != 8) {
+      var tierBoxProgressBar = document.createElement('div')
+      tierBoxProgressBar.classList.add('z-tier-progress')
+      var currentTierImg = document.createElement('img')
+      currentTierImg.src = "https://stonemoney.github.io/zdc/"+[tier+1]+'.png'
+      currentTierImg.classList.add("z-tier-img")
+      currentTierImg.classList.add("z-tier-current")
+      currentTierImg.style.opacity = '0'
+      var goalTierImg = document.createElement('img')
+      goalTierImg.src = "https://stonemoney.github.io/zdc/"+[tier+2]+'.png'
+      goalTierImg.classList.add("z-tier-img")
+      goalTierImg.classList.add("z-tier-goal")
+      goalTierImg.style.opacity = '0'
+      var progressBar = document.createElement('div')
+      progressBar.classList.add('z-tier-progressbar')
+      var actualProgress = document.createElement('div')
+      actualProgress.classList.add('z-tier-progressbar-actual')
+      //                                                                           add 5 to account for roundedness of bar when below 75%
+      var percentage = ((amnt/tierRequirements[tier+1])*100 < 75 ? ((amnt/tierRequirements[tier+1])*100+5)+"%" : ((amnt/tierRequirements[tier+1])*100)+"%")
+      actualProgress.style.width = '0%'
+      progressBar.insertAdjacentElement('afterbegin',actualProgress)
+      tierBoxProgressBar.insertAdjacentElement('beforeend',currentTierImg)
+      tierBoxProgressBar.insertAdjacentElement('beforeend',progressBar)
+      tierBoxProgressBar.insertAdjacentElement('beforeend',goalTierImg)
+      //FINAL DATA
+      var tierBoxCurrentLine = document.createElement('div');
+      tierBoxCurrentLine.insertAdjacentText('beforeend','You are '+tierStrings[tier]+' level!')
+      var tierBoxGoalLine = document.createElement('div');
+      tierBoxGoalLine.insertAdjacentText('beforeend','$'+(tierRequirements[tier+1]-amnt)+' away from '+tierStrings[tier+1]+' ($'+amnt+'/$'+tierRequirements[tier+1].toFixed(2)+')')
+      tierBox.insertAdjacentElement('beforeend',tierBoxProgressBar)
+      tierBox.insertAdjacentElement('beforeend',tierBoxCurrentLine)
+      tierBox.insertAdjacentElement('beforeend',tierBoxGoalLine)
+      donationName.insertAdjacentElement("afterend",tierBox)
+      setTimeout(function(){
+        currentTierImg.style.opacity = '1'
+      },250)
+      setTimeout(function(){
+        actualProgress.style.width = percentage
+      },50)
+      setTimeout(function(){
+        goalTierImg.style.opacity = '1'
+      },500)
+    } else {
+      var tierBoxCurrentLine = document.createElement('div');
+      tierBoxCurrentLine.insertAdjacentText('beforeend','You are '+tierStrings[tier]+' level! ($'+amnt+')')
+      tierBox.insertAdjacentElement('beforeend',tierBoxCurrentLine)
+      donationName.insertAdjacentElement("afterend",tierBox)
+    }
+  }
+}
 var checker1 = document.querySelector("div.payment-modal"); //payment-modal
 if(checker1 == null || checker1 == undefined) {
   var secretsoundsDropdown = document.createElement('select');
@@ -135,7 +227,7 @@ if(checker1 == null || checker1 == undefined) {
   secretsoundsBlankOption.setAttribute("value", "");
   secretsoundsBlankOption.setAttribute("selected", "selected");
   secretsoundsBlankOption.classList.add("special")
-  secretsoundsBlankOption.insertAdjacentHTML("beforeend","Secret Sounds 🡇 || Donation Totals 🡅");
+  secretsoundsBlankOption.insertAdjacentText("beforeend","Secret Sounds 🡇 || Donation Totals 🡅");
   var secretsoundsPalindrome = document.createElement('option');
   secretsoundsPalindrome.setAttribute("id", "pldon");
   secretsoundsPalindrome.classList.add("special")
@@ -167,7 +259,7 @@ if(checker1 == null || checker1 == undefined) {
     var ddContainer = document.createElement('div')
     ddContainer.classList.add("z-body")
     var header = document.createElement('h1')
-    header.innerHTML = "Special Amounts"
+    header.insertAdjacentText('afterbegin',"Special Amounts")
     var search = document.createElement('input')
     search.setAttribute('type','text')
     search.setAttribute('placeholder','Search...')
@@ -178,15 +270,16 @@ if(checker1 == null || checker1 == undefined) {
     ddContainer.insertAdjacentElement("afterbegin",secretsoundsDropdown);
     ddContainer.insertAdjacentElement("afterbegin",search)
     ddContainer.insertAdjacentElement("afterbegin",header)
-    donFormBody.insertAdjacentHTML("afterend", ddContainer.outerHTML);
+    donFormBody.insertAdjacentElement("afterend", ddContainer);
     search.addEventListener('keyup',filterFunction)
   } else {
-    donationAmt.insertAdjacentHTML("afterend", secretsoundsDropdown.outerHTML);
+    donationAmt.insertAdjacentElement("afterend", secretsoundsDropdown);
   }
   
   document.getElementById('dropdowns').onchange= function setVal() {
-     donationAmt.value = document.getElementById("dropdowns").value;
-	 paypalFeeCheck();
+    donationAmt.value = document.getElementById("dropdowns").value;
+    lockAmnt = document.getElementById("dropdowns").value;
+	  paypalFeeCheck();
   }
   
   document.getElementById('z-searchbox').onkeyup = function(){filterFunction()}
@@ -201,8 +294,7 @@ var minimumDonation = 100;
 //Locator
 
 function locate(find, contents, name) {
-  console.log(find)
-  document.getElementById(find).innerHTML = formatMoney(toDollars(contents)) + " " + name;
+  document.getElementById(find).insertAdjacentText('afterbegin',formatMoney(toDollars(contents)) + " " + name)
   document.getElementById(find).value = toDollars(contents);
 }
 
@@ -429,24 +521,21 @@ function httpGet(theUrl, callback) {
     xhr.send(null);
 }
 function getDonationSounds() {
-	console.log("yes")
-	chrome.runtime.sendMessage({request: "donation-sounds"});
+	chrome.runtime.sendMessage({request: "sounds"});
 }
 
 function loadSounds(response){
-	console.log(response)
 	var data = JSON.parse(response);
 	data['feed']['entry'].forEach(function(x){
 		var secretsoundsOption = document.createElement('option');
     secretsoundsOption.setAttribute("value", x['title']['$t']);
-		secretsoundsOption.insertAdjacentHTML("beforeend","$"+x['title']['$t']+" "+x['gsx$name']['$t']);
+		secretsoundsOption.insertAdjacentText("beforeend","$"+x['title']['$t']+" "+x['gsx$name']['$t']);
 		secretsoundsOption.classList.add("z-secrets")
-		document.querySelector('select').insertAdjacentHTML("beforeend",secretsoundsOption.outerHTML);
+		document.querySelector('select').insertAdjacentElement("beforeend",secretsoundsOption);
 	})
 }
 
 function filterFunction() {
-  console.log("y")
   var input, filter, a, i;
   input = document.getElementById("z-searchbox");
   filter = input.value.toUpperCase();
@@ -462,6 +551,23 @@ function filterFunction() {
   }
 }
 
-function logger(str) {
-	console.log(str)
+function getTierID(amnt) {
+  if(amnt < 5) {
+    return 0
+  } else if(amnt < 10) {
+    return 1
+  } else if(amnt < 25) {
+    return 2
+  } else if(amnt < 50) {
+    return 3
+  } else if(amnt < 100) {
+    return 4
+  } else if(amnt < 250) {
+    return 5
+  } else if(amnt < 500) {
+    return 6
+  } else if(amnt < 1000) {
+    return 7
+  }
+  return 8
 }

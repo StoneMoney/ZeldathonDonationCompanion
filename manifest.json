@@ -1,8 +1,8 @@
 {
-    "name": "Unofficial Zeldathon Donation Companion",
-    "version": "3.0",
+    "name": "Zeldathon Donation Companion",
+    "version": "4",
     "manifest_version": 2,
-    "description": "Unofficial donation companion for Zeldathon. Track donations, view tiers, set budgets",
+    "description": "Donation companion for Zeldathon. Track donations, view tiers, set budgets",
     "icons": {
 		"16": "images/icon_16.png",
         "19": "images/icon_19.png",
@@ -19,7 +19,7 @@
         "default_popup": "html/main.html"
     },
     "options_page": "html/options.html",
-    "homepage_url": "http://zeldathon.net/",
+    "homepage_url": "http://stonemoney.github.io/",
 	"background": {
 		"scripts": ["js/background.js"],
 		"persistent": false

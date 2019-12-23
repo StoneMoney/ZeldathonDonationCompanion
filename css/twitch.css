@@ -39,3 +39,60 @@
   flex: 1;
   padding: 8px;
 }
+.docs-box {
+  z-index: 100000;
+  top: 12vh;
+  left: 10vh;
+  position: fixed;
+  min-width: 262px;
+  max-width: 1000px;
+  max-height: 500px;
+  transition: opacity 1s;
+  /* background: rgba(0,0,0,.5) */
+}
+.docs-box h3 {
+  position: fixed;
+  top: 7.5vh;
+}
+.docs-box ul {
+  list-style: disc;
+}
+.schedule-box {
+  z-index: 100000;
+  top: 10vh;
+  left: 10vh;
+  position: fixed;
+  min-width: 10vw;
+  max-width: 1000px;
+  max-height: 500px;
+  overflow-y: scroll;
+  transition: opacity 1s;
+  /* background: rgba(0,0,0,.5) */
+}
+
+.schedule-box h3 {
+  position: fixed;
+  top: 7.5vh;
+}
+
+.schedule-item {
+  font-size: 1em;
+}
+.schedule-row {
+  display: grid;
+  padding: 1vw;
+  border-bottom: 3px solid rgba(0,0,0,.2);
+  grid-template-areas: 'time' 'game' 'runner';
+}
+.game {
+  font-size: 1.5rem;
+  grid-area: game;
+}
+.runners {
+  font-style: italic;
+  grid-area: runner;
+}
+.time {
+  opacity: .8;
+  grid-area: time;
+}
