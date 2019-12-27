@@ -1,5 +1,8 @@
 var testMode = false;
-
+// The above flag forces test mode, which removes the time restriction for content appearing
+if (document.readyState === 'complete') {
+	pageLoaded()
+}
 var ready = false;
 var scheduleReady = false;
 var docsReady = false;
@@ -60,6 +63,9 @@ var callback = function (mutationsList, observer) {
 var observer = new MutationObserver(callback);
 
 window.onload = function () {
+	pageLoaded()
+}
+function pageLoaded() {
 	setTimeout(function () {
 		chrome.storage.sync.get(['isBless'], function (result) {
 			if (result.isBless != true && result.isBless != false) {
@@ -251,7 +257,6 @@ function toggleVisibilityDocs() {
 	}
 }
 function loadSchedule(stuff) {
-	// stuff = JSON.parse(stuff)
 	var now = Date.now();
 	var scheduleTableHeader = document.createElement("h3")
 	scheduleTableHeader.classList.add("tw-c-background-base")
@@ -299,7 +304,6 @@ function loadSchedule(stuff) {
 	scheduleReady = true;
 }
 function loadDocs() {
-	// stuff = JSON.parse(stuff)
 	var now = Date.now();
 	var docsTableHeader = document.createElement("h3")
 	docsTableHeader.classList.add("tw-c-background-base")

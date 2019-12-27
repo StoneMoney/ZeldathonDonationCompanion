@@ -80,6 +80,8 @@ function processPastDonations() {
     var amountField = document.createElement('input')
     amountField.classList.add('pd-value')
     amountField.setAttribute('type', 'number')
+    amountField.setAttribute('step','.01')
+    amountField.setAttribute('min','0')
     amountField.value = sect[1]
     var submitButton = document.createElement('button')
     submitButton.classList.add('pd-submit')
