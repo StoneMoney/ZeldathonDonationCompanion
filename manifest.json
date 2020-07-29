@@ -1,6 +1,6 @@
 {
     "name": "Zeldathon Donation Companion",
-    "version": "4.0.1",
+    "version": "5.0.0",
     "manifest_version": 2,
     "description": "Donation companion for Zeldathon. Track donations, view tiers, set budgets",
     "icons": {
