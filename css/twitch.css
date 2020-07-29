@@ -16,6 +16,21 @@
 	background: #8f40ef !important;
 }
 
+.donate-button {
+  max-width: 100px !important;
+}
+
+.donate-button a:link {
+  color: #FFF !important;
+}
+
+.ZDC-PANEL {
+  background: url('https://www.stone.money/zdc/triangles.webp');
+  background-repeat: no-repeat;
+  background-position-x: right;
+  background-position-y: bottom;
+}
+
 .shirt-box {
   z-index: 100000;
   top: 10vh;

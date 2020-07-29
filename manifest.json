@@ -32,6 +32,6 @@
 	{
       "css": ["css/twitch.css"],
       "js": ["js/live.js"],
-      "matches": ["https://www.twitch.tv/supermcgamer/*","https://www.twitch.tv/SuperMCgamer/*","https://www.twitch.tv/SuperMCGamer","https://www.twitch.tv/SuperMCGamer"]
+      "matches": ["https://www.twitch.tv/stonemoney533/*","https://www.twitch.tv/supermcgamer/*","https://www.twitch.tv/SuperMCgamer/*","https://www.twitch.tv/SuperMCGamer","https://www.twitch.tv/SuperMCGamer"]
     }]
 }
