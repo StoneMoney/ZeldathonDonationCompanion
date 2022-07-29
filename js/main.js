@@ -5,7 +5,7 @@
 var nf = new Intl.NumberFormat();
 var currentDonationTotal = 0;
 window.onload = function(){
-  httpGet("https://zeldathon.net/api/Kinstone/total",setTotal);
+  httpGet("https://donate.zeldathon.net/total",setTotal);
   // httpGet("https://zeldathon.net/api/teamhousecup",setPoints);
   
   //chrome.storage.sync.get(['defaultname'], function(result) {
@@ -44,8 +44,7 @@ window.onload = function(){
 	//   document.getElementById('wisdom').innerHTML = points[2]['points'];	
 	// }
 	function setTotal(data) {
-		var marathontotal = JSON.parse(data);
-		document.getElementById('marathontotal').innerHTML = marathontotal[0];
+		document.getElementById('marathontotal').innerHTML = data;
 	}
 }
 document.getElementById('options').onclick = function() {

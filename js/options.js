@@ -43,12 +43,12 @@ document.getElementById('btn').onclick = function () {
     chrome.storage.sync.set({ total: parseFloat(document.getElementById('total').value).toFixed(2) }, function () {
       console.log('Value is set to ' + document.getElementById('total').value);
     });
-  }
-  if (document.getElementById('blessfilter').checked) {
-    chrome.storage.sync.set({ isBless: true }, function () {
-      console.log('Bless Value is set to true');
-    });
   } else {
+  // if (document.getElementById('blessfilter').checked) {
+  //   chrome.storage.sync.set({ isBless: true }, function () {
+  //     console.log('Bless Value is set to true');
+  //   });
+  // } else {
     chrome.storage.sync.set({ isBless: false }, function () {
       console.log('Value is set to false');
     });
