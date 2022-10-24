@@ -10,7 +10,7 @@ var pastDonations;
 var budget;
 var tierStrings = [
   "Gerudo",
-  "Kokiri",
+  "Korok",
   "Goron",
   "Zora",
   "Oracle",
@@ -27,12 +27,10 @@ paypalFeeAlert.setAttribute("id", "paypalFeeAlert");
 var donationAmtContainer;
 var donationName = document.querySelector("input[name='name']");
 var donationAmt;
-var donationComment = document.querySelector("textarea[name='comments']");
 // var butt = document.querySelector("button.primary");
-var donFormBody = document.querySelector("form.donation");
 // var checker = document.querySelector("div.payment-modal");
 
-var body = document.querySelector("div.body");
+var body = document.querySelector("div.pt-20");
 var container = document.createElement("p");
 var item = document.createElement("div");
 var itemB = document.createElement("div");
@@ -41,16 +39,11 @@ container.appendChild(item);
 container.appendChild(itemB);
 body.appendChild(container);
 
-// GET MESSAGE FROM BACKGROUND LOADER
-chrome.runtime.onMessage.addListener(function (inMessage, callback) {
-  loadSounds(inMessage.sounds);
-});
-
 window.onload = function () {
   pageLoaded();
 };
 function pageLoaded() {
-  var checker1 = document.querySelector("div.payment-modal"); //payment-modal
+  var checker1 = document.querySelector("div.bg-gradient-title"); //payment-modal
   chrome.storage.sync.get(["total"], function (result) {
     if (isNaN(result.total) || result.total == null) {
       chrome.storage.sync.set({ total: 0 }, function () {});
@@ -118,122 +111,19 @@ function pageLoaded() {
           pastDonations = new Map();
         }
       }
-      if (checker1 == null || checker1 == undefined) {
-        Array.from(document.querySelectorAll("button"))
-          .find((el) => el.textContent === "Other")
-          .click();
-        setTimeout(() => {
-          donationAmt = document.querySelector("input[name='amount']");
-          donationAmtContainer = document.querySelector(
-            "div[class='required field']"
-          );
-          document.querySelector(
-            "i[class='close link icon']"
-          ).style.visibility = "hidden";
-          check();
-        }, 100);
+      if (checker1 == null || checker1.innerText == "DONATE FORM") {
+        donationAmt = document.querySelector("input[name='amount']");
+        donationAmtContainer = donationAmt.parentNode
+        check();
       } else {
         check();
       }
     });
   });
   function check() {
-    var checker1 = document.querySelector("div.payment-modal"); //payment-modal
-    if (checker1 == null || checker1 == undefined) {
-      donationAmt = document.querySelector("input[name='amount']");
-      var secretsoundsDropdown = document.createElement("select");
-      secretsoundsDropdown.setAttribute("id", "dropdowns");
-      var secretsoundsBlankOption = document.createElement("option");
-      secretsoundsBlankOption.setAttribute("value", "");
-      secretsoundsBlankOption.setAttribute("selected", "selected");
-      secretsoundsBlankOption.classList.add("special");
-      secretsoundsBlankOption.insertAdjacentText(
-        "beforeend",
-        "Secret Sounds 🡇 || Donation Totals 🡅"
-      );
-      var secretsoundsPalindrome = document.createElement("option");
-      secretsoundsPalindrome.setAttribute("id", "pldon");
-      secretsoundsPalindrome.classList.add("special");
-      var secretsoundsFixers = document.createElement("option");
-      secretsoundsFixers.setAttribute("id", "fxdon");
-      secretsoundsFixers.classList.add("special");
-      var secretsoundsStepdigitUp = document.createElement("option");
-      secretsoundsStepdigitUp.setAttribute("id", "sudon");
-      secretsoundsStepdigitUp.classList.add("special");
-      var secretsoundsStepdigitDown = document.createElement("option");
-      secretsoundsStepdigitDown.setAttribute("id", "sddon");
-      secretsoundsStepdigitDown.classList.add("special");
-      var secretsoundsRepdigit = document.createElement("option");
-      secretsoundsRepdigit.setAttribute("id", "rddon");
-      secretsoundsRepdigit.classList.add("special");
-      var secretsoundsAltdigit = document.createElement("option");
-      secretsoundsAltdigit.setAttribute("id", "aldon");
-      secretsoundsAltdigit.classList.add("special");
-      secretsoundsDropdown.insertAdjacentElement(
-        "afterBegin",
-        secretsoundsPalindrome
-      );
-      secretsoundsDropdown.insertAdjacentElement(
-        "afterBegin",
-        secretsoundsFixers
-      );
-      secretsoundsDropdown.insertAdjacentElement(
-        "afterBegin",
-        secretsoundsStepdigitUp
-      );
-      secretsoundsDropdown.insertAdjacentElement(
-        "afterBegin",
-        secretsoundsStepdigitDown
-      );
-      secretsoundsDropdown.insertAdjacentElement(
-        "afterBegin",
-        secretsoundsRepdigit
-      );
-      secretsoundsDropdown.insertAdjacentElement(
-        "afterBegin",
-        secretsoundsAltdigit
-      );
-      secretsoundsDropdown.insertAdjacentElement(
-        "beforeend",
-        secretsoundsBlankOption
-      );
-      getDonationSounds();
-
-      if (window.innerWidth > 767) {
-        var ddContainer = document.createElement("div");
-        ddContainer.classList.add("z-body");
-        var header = document.createElement("h1");
-        header.insertAdjacentText("afterbegin", "Special Amounts");
-        var search = document.createElement("input");
-        search.setAttribute("type", "text");
-        search.setAttribute("placeholder", "Search...");
-        search.setAttribute("id", "z-searchbox");
-        secretsoundsDropdown.classList.add("z-sidebar");
-        secretsoundsDropdown.style.width = "";
-        secretsoundsDropdown.size = "15";
-        ddContainer.insertAdjacentElement("afterbegin", secretsoundsDropdown);
-        ddContainer.insertAdjacentElement("afterbegin", search);
-        ddContainer.insertAdjacentElement("afterbegin", header);
-        donFormBody.insertAdjacentElement("afterend", ddContainer);
-        search.addEventListener("keyup", filterFunction);
-      } else {
-        donationAmt.insertAdjacentElement("afterend", secretsoundsDropdown);
-      }
-
-      document.getElementById("dropdowns").onchange = function setVal() {
-        donationAmt.value = document.getElementById("dropdowns").value;
-        lockAmnt = document.getElementById("dropdowns").value;
-        paypalFeeCheck();
-      };
-      const searchbox = document.getElementById("z-searchbox");
-      if (searchbox) {
-        searchbox.onkeyup = function () {
-          filterFunction();
-        };
-      }
-    }
+    var checker1 = document.querySelector("div.bg-gradient-title"); //payment-modal
     //EXECUTES ON THE DONATION RESULT PAGE
-    if (checker1 != null || testMode) {
+    if ((checker1 != null && checker1.innerText == "THANK YOU FOR DONATING!") || testMode) {
       console.log("Valid donation result page");
       var pClearValue = { value: 0, name: "" };
       chrome.storage.sync.set(
@@ -277,11 +167,7 @@ function pageLoaded() {
       });
       //EXECUTES ON THE "MAKE A DONATION" PAGE
     } else {
-      httpGet(`${window.location.origin}/total?unformatted=true`, doTheThing);
       donationAmt.addEventListener("focusout", paypalFeeCheck);
-      donationAmt.addEventListener("input", resetLockAmount);
-      donationName.addEventListener("input", keepAmntLocked);
-      donationComment.addEventListener("input", keepAmntLocked);
       donationName.addEventListener("focusout", donationTierCheck);
       donationAmtContainer.insertAdjacentElement("afterend", paypalFeeAlert);
     }
@@ -326,17 +212,7 @@ function paypalFeeCheck() {
     document.getElementById("paypalFeeAlert").innerHTML = "";
   }
 }
-//Because something on kinstone's end resets the amount box if programattically adjusted,
-//this is the workaround
-function keepAmntLocked() {
-  if (lockAmnt > -1) {
-    donationAmt.value = lockAmnt;
-  }
-}
-function resetLockAmount() {
-  lockAmnt = donationAmt.value;
-  console.log("reset " + lockAmnt);
-}
+
 function donationTierCheck() {
   var name = donationName.value.toLowerCase();
   if (document.querySelector("div.z-tier-box")) {
@@ -347,6 +223,7 @@ function donationTierCheck() {
     var tier = getTierID(amnt);
     var tierBox = document.createElement("div");
     tierBox.classList.add("z-tier-box");
+    tierBox.classList.add("fade-in");
     tierBox.insertAdjacentText(
       "afterbegin",
       "**Personal donations to this name**"
@@ -422,306 +299,14 @@ function donationTierCheck() {
       tierBox.insertAdjacentElement("beforeend", tierBoxCurrentLine);
       donationName.insertAdjacentElement("afterend", tierBox);
     }
-  }
-}
-
-//PORTED code from 0rganics and Bell
-//GLOBALS
-
-var minimumDonation = 100;
-
-//Locator
-
-function locate(find, contents, name) {
-  document
-    .getElementById(find)
-    .insertAdjacentText(
-      "afterbegin",
-      formatMoney(toDollars(contents)) + " " + name
-    );
-  document.getElementById(find).value = toDollars(contents);
-}
-
-//Money Functions
-function toCents(total) {
-  total = Math.round(parseFloat(total.toString().replace(",", "")) * 100);
-  return total;
-}
-
-function toCentsByMult(total) {
-  return total * 100;
-}
-function toDollars(total) {
-  total = total / 100;
-  return total;
-}
-
-// formatMoney() function copied from:
-// http://www.josscrowcroft.com/2011/code/format-unformat-money-currency-javascript/
-// Slight modification by Organics to allow blank thousand symbol.
-function formatMoney(number, places, symbol, thousand, decimal) {
-  number = number || 0;
-  places = !isNaN((places = Math.abs(places))) ? places : 2;
-  symbol = symbol !== undefined ? symbol : "$";
-  thousand = thousand !== undefined ? thousand : ",";
-  decimal = decimal || ".";
-  var negative = number < 0 ? "-" : "",
-    i = parseInt((number = Math.abs(+number || 0).toFixed(places)), 10) + "",
-    j = (j = i.length) > 3 ? j % 3 : 0;
-  return (
-    symbol +
-    negative +
-    (j ? i.substr(0, j) + thousand : "") +
-    i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + thousand) +
-    (places
-      ? decimal +
-        Math.abs(number - i)
-          .toFixed(places)
-          .slice(2)
-      : "")
-  );
-}
-
-//Team Code
-
-//Palindrome
-function isPalindrome(total) {
-  total = total.toString();
-  if (total === total.split("").reverse().join("")) {
-    return true;
   } else {
-    return false;
-  }
-}
-function teamPalindrome(total) {
-  var holder = total;
-  while (true) {
-    total++;
-    if (isPalindrome(total) === true) {
-      if (toDollars(total - holder) > 1.0) {
-        locate(
-          "pldon",
-          total - holder,
-          "Palindrome (" + formatMoney(toDollars(total)) + ")"
-        );
-        break;
-      }
-    }
-  }
-}
-
-//Team Fixers (rounds up a dollar)
-function teamFixers(total) {
-  var cents = 100 - (total % 100);
-
-  locate("fxdon", parseInt(cents) + 100, "Fixer");
-}
-
-function altDigit(total) {
-  intTotal = total;
-
-  var intAL = [
-    parseInt(intTotMin.toString().substr(0, 1)),
-    parseInt(intTotMin.toString().substr(1, 1)) - 1,
-  ];
-  var intAL1 = 1;
-  var intAL2 = intAL[0];
-  var intALlen = intTotMin.toString().length;
-  while (intAL2 < intTotMin) {
-    intAL[1] = intAL[1] + 1;
-    if (intAL[1] == intAL[0]) {
-      intAL[1] = intAL[1] + 1;
-    }
-    if (intAL[1] >= 10) {
-      intAL[0] = intAL[0] + 1;
-      intAL[1] = 0;
-      if (intAL[0] == 10) {
-        intAL[0] = 1;
-        intALlen = intALlen + 1;
-      }
-    }
-    intAL2 = intAL[0];
-    intAL1 = 1;
-    while (intAL2.toString().length < intALlen) {
-      intAL2 = parseInt(intAL2.toString().concat(intAL[intAL1]));
-      intAL1 = 1 - intAL1;
-    }
-  }
-  var intALTot = parseInt(intAL2);
-  var intALDon = intALTot - intTotal;
-  locate(
-    "aldon",
-    intALDon,
-    "Alternating Digits (" + formatMoney(toDollars(intALTot)) + ")"
-  );
-}
-
-function stepdigitUp(total) {
-  intTotal = total;
-
-  var intSUlen = intTotMin.toString().length;
-  var intSUstart = parseInt(intTotMin.toString().substr(0, 1));
-  var intSU1 = 0;
-  var intSU2 = 0;
-  intSUstart = intSUstart - 1;
-  var booSUerr = false;
-  while (intSU1 < intTotMin && booSUerr == false) {
-    intSUstart = intSUstart + 1;
-    if (intSUstart + intSUlen > 10) {
-      intSUstart = 1;
-      intSUlen = intSUlen + 1;
-    }
-    if (intSUlen == 10) {
-      booSUerr = true;
-    }
-    intSU2 = intSUstart;
-    intSU1 = intSUstart;
-    while (intSU1.toString().length < intSUlen) {
-      intSU2 = intSU2 + 1;
-      intSU1 = intSU1.toString().concat(intSU2);
-    }
-  }
-  var intSUTot = intSU1;
-  var intSUDon = intSUTot - intTotal;
-  if (booSUerr == false) {
-    locate(
-      "sudon",
-      intSUDon,
-      "Stepdigit Up (" + formatMoney(toDollars(intSUTot)) + ")"
+    var tierBox = document.createElement("div");
+    tierBox.classList.add("z-tier-box");
+    tierBox.insertAdjacentText(
+      "afterbegin",
+      "**No personal donations to this name**"
     );
-  }
-}
-
-function stepdigitDown(total) {
-  intTotal = total;
-
-  var intSDlen = intTotMin.toString().length;
-  var intSDstart = parseInt(intTotMin.toString().substr(0, 1));
-  intSDstart = Math.max(intSDstart, intSDlen - 1);
-  var intSD1 = 0;
-  var intSD2 = 0;
-  intSDstart = intSDstart - 1;
-  var booSDerr = false;
-  while (intSD1 < intTotMin && booSDerr == false) {
-    intSDstart = intSDstart + 1;
-    if (intSDstart >= 10) {
-      intSDlen = intSDlen + 1;
-      intSDstart = intSDlen - 1;
-    }
-    if (intSDlen > 10) {
-      booSDerr = true;
-    }
-    intSD2 = intSDstart;
-    intSD1 = intSDstart;
-    while (intSD1.toString().length < intSDlen) {
-      intSD2 = intSD2 - 1;
-      intSD1 = intSD1.toString().concat(intSD2);
-    }
-  }
-  var intSDTot = intSD1;
-  var intSDDon = intSDTot - intTotal;
-  if (booSDerr == false) {
-    locate(
-      "sddon",
-      intSDDon,
-      "Stepdigit Down (" + formatMoney(toDollars(intSDTot)) + ")"
-    );
-  }
-}
-
-function repDigit(total) {
-  intTotal = total;
-
-  var intRD1 = parseInt(intTotMin.toString().substr(0, 1));
-  var intRDlen = intTotMin.toString().length;
-  var intRD2 = intRD1;
-  while (intRD2.toString().length < intRDlen) {
-    intRD2 = intRD2.toString().concat(intRD1);
-  }
-  while (parseInt(intRD2) < intTotMin) {
-    intRD1 = intRD1 + 1;
-    if (intRD1 == 10) {
-      intRD1 = 1;
-      intRDlen = intRDlen + 1;
-    }
-    intRD2 = intRD1;
-    while (intRD2.toString().length < intRDlen) {
-      intRD2 = intRD2.toString().concat(intRD1);
-    }
-  }
-  intRDTot = parseInt(intRD2);
-  intRDDon = intRDTot - intTotal;
-  locate(
-    "rddon",
-    intRDDon,
-    "Repeating (" + formatMoney(toDollars(intRDTot)) + ")"
-  );
-}
-
-//INITIALIZATION FOR ALL
-function doTheThing(total) {
-  total = toCents(total).toString();
-  intTotMin = parseInt(total) + minimumDonation;
-  teamPalindrome(total);
-  teamFixers(total);
-  stepdigitUp(total);
-  stepdigitDown(total);
-  repDigit(total);
-  altDigit(total);
-}
-
-//SPECIAL POWER FUNCTIONS
-function httpGet(theUrl, callback) {
-  var xhr = new XMLHttpRequest();
-  xhr.open("GET", theUrl, true);
-  xhr.onload = function (e) {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        callback(xhr.responseText);
-      } else {
-        console.error(xhr.statusText);
-        return 0;
-      }
-    }
-  };
-  xhr.onerror = function (e) {
-    console.error(xhr.statusText);
-  };
-  xhr.send(null);
-}
-function getDonationSounds() {
-  chrome.runtime.sendMessage({ request: "sounds" });
-}
-
-function loadSounds(response) {
-  console.log(response);
-  response.forEach(function (x) {
-    var secretsoundsOption = document.createElement("option");
-    secretsoundsOption.setAttribute("value", x["amount"] / 100);
-    secretsoundsOption.insertAdjacentText(
-      "beforeend",
-      "$" + (x["amount"] / 100).toFixed(2) + " " + x["description"]
-    );
-    secretsoundsOption.classList.add("z-secrets");
-    document
-      .getElementById("dropdowns")
-      .insertAdjacentElement("beforeend", secretsoundsOption);
-  });
-}
-
-function filterFunction() {
-  var input, filter, a, i;
-  input = document.getElementById("z-searchbox");
-  filter = input.value.toUpperCase();
-  div = document.getElementById("dropdowns");
-  a = div.getElementsByTagName("option");
-  for (i = 0; i < a.length; i++) {
-    txtValue = a[i].textContent || a[i].innerText;
-    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-      a[i].style.display = "";
-    } else {
-      a[i].style.display = "none";
-    }
+    donationName.insertAdjacentElement("afterend", tierBox);
   }
 }
 
