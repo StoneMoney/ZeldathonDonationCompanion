@@ -130,45 +130,45 @@
   border-radius: 0.2rem;
 }
 
-.badge-Fighter {
+.badge-Mummy {
   image-rendering: crisp-edges;
   color: rgb(255,255,255);
-  background: url('https://stone.money/zdc/fighter.png') rgb(251, 176, 59);
+  background: url('https://stone.money/zdc/mummy.png') #ff9900;
   background-size: 1.8rem;
-  background-image: -webkit-image-set(url('https://stone.money/zdc/fighter.png') 1x, url('https://stone.money/zdc/fighter@2x.png') 2x, url('https://stone.money/zdc/fighter@3x.png') 3x);
+  background-image: -webkit-image-set(url('https://stone.money/zdc/chat-mummy.png') 1x);
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 0.2rem;
 }
 
-.badge-Cleric {
+.badge-Vampire {
   image-rendering: crisp-edges;
   color: rgb(255,255,255);
-  background: url('https://stone.money/zdc/cleric.png') rgb(251, 176, 59);
+  background: url('https://stone.money/zdc/vampire.png') #a31a1a;
   background-size: 1.8rem;
-  background-image: -webkit-image-set(url('https://stone.money/zdc/cleric.png') 1x, url('https://stone.money/zdc/cleric@2x.png') 2x, url('https://stone.money/zdc/cleric@3x.png') 3x);
+  background-image: -webkit-image-set(url('https://stone.money/zdc/chat-vampire.png') 1x);
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 0.2rem;
 }
 
-.badge-Mage {
+.badge-Ghost {
   image-rendering: crisp-edges;
   color: rgb(255,255,255);
-  background: url('https://stone.money/zdc/mage.png') rgb(251, 176, 59);
+  background: url('https://stone.money/zdc/ghost.png') #000000;
   background-size: 1.8rem;
-  background-image: -webkit-image-set(url('https://stone.money/zdc/mage.png') 1x, url('https://stone.money/zdc/mage@2x.png') 2x, url('https://stone.money/zdc/mage@3x.png') 3x);
+  background-image: -webkit-image-set(url('https://stone.money/zdc/chat-ghost.png') 1x);
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 0.2rem;
 }
 
-.badge-Rogue {
+.badge-Werewolf {
   image-rendering: crisp-edges;
   color: rgb(255,255,255);
-  background: url('https://stone.money/zdc/rogue.png') rgb(251, 176, 59);
+  background: url('https://stone.money/zdc/werewolf.png') #9900ff;
   background-size: 1.8rem;
-  background-image: -webkit-image-set(url('https://stone.money/zdc/rogue.png') 1x, url('https://stone.money/zdc/rogue@2x.png') 2x, url('https://stone.money/zdc/rogue@3x.png') 3x);
+  background-image: -webkit-image-set(url('https://stone.money/zdc/chat-werewolf.png') 1x);
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 0.2rem;
@@ -180,13 +180,13 @@
 }
 
 .color-2 {
-  background-color: #EE4463 !important;
+  background-color: #ff9900 !important;
 }
 
 .color-3 {
-  background-color: #092A81 !important;
+  background-color: #000000 !important;
 }
 
 .color-4 {
-  background-color: #16003E !important;
+  background-color: #9900ff !important;
 }

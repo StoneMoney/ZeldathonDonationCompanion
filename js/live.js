@@ -20,15 +20,15 @@ chrome.runtime.sendMessage({ request: "people" });
 // GET MESSAGE FROM BACKGROUND LOADER
 
 chrome.runtime.onMessage.addListener(function (inMessage, callback) {
-	// houses = parsed.data.tempsqhouses.map((house)=>{return house.name})
-	// houseTeamList = parsed.data.tempsqhouseusers.map((user)=>{return {name: user.name.toLowerCase(), house_id: user.house_id}})
-	// houseUserList = parsed.data.tempsqhouseusers.filter((u) => {return u.house_id > 0}).map((user)=>{return user.name.toLowerCase()})
+	houses = inMessage.people.tempsqhouses.map((house)=>{return house.name})
+	houseTeamList = inMessage.people.tempsqhouseusers.map((user)=>{return {name: user.name.toLowerCase(), house_id: user.house_id}})
+	houseUserList = inMessage.people.tempsqhouseusers.filter((u) => {return u.house_id > 0}).map((user)=>{return user.name.toLowerCase()})
 	inMessage.people.attendees.map((person) => {
 		if(person.twitch_login.length > 0) {
 			switch (person.rank) {
 			case "Active":
 			case "Other":
-				kinstoneList.push(person.twitch_login)
+				// kinstoneList.push(person.twitch_login)
 				break;
 			// case "Guest":
 			// 	guestsList.push(person.twitch_login)
@@ -152,14 +152,14 @@ function pageLoaded() {
 		// Check if zeldathon is happening, then apply changes
 		// Alternatively testMode set at line 1 will force changes to occur
 		if (
-			(Date.UTC(2022, 8, 1) < Date.UTC(date.getFullYear(), date.getMonth() + 1, date.getDate())
-			&& Date.UTC(date.getFullYear(), date.getMonth() + 1, date.getDate()) < Date.UTC(2022, 8, 12)) 
+			(Date.UTC(2022, 10, 23) < Date.UTC(date.getFullYear(), date.getMonth() + 1, date.getDate())
+			&& Date.UTC(date.getFullYear(), date.getMonth() + 1, date.getDate()) < Date.UTC(2022, 11, 1)) 
 			|| testMode
 		   ) 
 		{
 			// chrome.runtime.sendMessage({ request: "schedule" });
 			// loadDocs();
-			document.getElementById("chat-room-header-label").innerHTML = "Zeldathon Daybreak"
+			document.getElementById("chat-room-header-label").innerHTML = "SideQuest"
 			console.log('Zeldathon is happening!!')
 			// var socialsBox = document.querySelector("div[data-a-target='about-panel']").parentElement;
 			// var zeldathonBox = document.createElement('div');

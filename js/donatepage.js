@@ -30,7 +30,7 @@ var donationAmt;
 // var butt = document.querySelector("button.primary");
 // var checker = document.querySelector("div.payment-modal");
 
-var body = document.querySelector("div.pt-20");
+var body = document.querySelector("div.bg-dark-blue");
 var container = document.createElement("p");
 var item = document.createElement("div");
 var itemB = document.createElement("div");
